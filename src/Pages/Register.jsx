@@ -5,14 +5,29 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { Typography } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 export default function Register() {
   const nav = useNavigate();
+  const [open, setOpen] = React.useState(false);
+  const [err, setErr] = React.useState({ message: "", type: "" });
   const [details, setDetails] = React.useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
   const fields = ["Name", "Email", "Password"];
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
   return (
     <Box
       sx={{
@@ -40,14 +55,15 @@ export default function Register() {
         onSubmit={async (e) => {
           e.preventDefault();
           await axios
-            .post(
-              "https://gym-server-yi13.onrender.com/api/register",details)
-            .then((res) => alert(res.data))
+            .post("https://gym-server-yi13.onrender.com/api/register", details)
             .then(() => localStorage.setItem("users", JSON.stringify(details)))
             .then(() => {
               nav("/");
             })
-            .catch((err) => alert(err.response.data));
+            .catch((err) => {
+              setErr({ message: err.response.data, type: "error" });
+              handleClick(true);
+            });
         }}
       >
         {fields.map((ele, ind) => {
@@ -93,6 +109,12 @@ export default function Register() {
           </Link>
         </Typography>
       </form>
+
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={err.type} sx={{ width: "100%" }}>
+          {err.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

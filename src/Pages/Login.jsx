@@ -7,8 +7,11 @@ import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Sub } from "../App";
-
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 export default function Login() {
+  const [open, setOpen] = React.useState(false);
+  const [err, setErr] = React.useState({ message: "", type: "" });
   const nav = useNavigate();
   const value = React.useContext(Sub);
   const [details, setDetails] = React.useState({
@@ -16,7 +19,17 @@ export default function Login() {
     password: "",
   });
   const fields = ["Email", "Password"];
+  const handleClick = () => {
+    setOpen(true);
+  };
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
   return (
     <Box
       sx={{
@@ -46,11 +59,13 @@ export default function Login() {
           e.preventDefault();
           await axios
             .post("https://gym-server-yi13.onrender.com/api/login", details)
-            .then((res) => alert(res.data))
             .then(() => {
               nav("/home");
             })
-            .catch((err) => alert(err.response.data));
+            .catch((err) => {
+              handleClick(true);
+              setErr({ message: err.response.data, type: "error" });
+            });
         }}
       >
         {fields.map((ele, ind) => {
@@ -99,6 +114,11 @@ export default function Login() {
           </Link>
         </Typography>
       </form>
+      <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={err.type} sx={{ width: "100%" }}>
+          {err.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
