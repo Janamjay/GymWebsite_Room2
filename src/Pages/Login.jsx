@@ -30,6 +30,14 @@ export default function Login() {
 
     setOpen(false);
   };
+  React.useEffect(() => {
+    if (
+      JSON.parse(localStorage.getItem("users")) &&
+      JSON.parse(localStorage.getItem("users"))["email"]
+    ) {
+      nav("/home");
+    }
+  }, []);
   return (
     <Box
       sx={{
