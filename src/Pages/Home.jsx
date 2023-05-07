@@ -20,12 +20,13 @@ const Home = () => {
           sx={{
             color: "orange",
             width: { xs: "15rem", sm: "50rem" },
-            fontSize: { xs: "1.5rem", sm: "2rem" },
+            fontSize: { xs: "1.5rem", sm: "3rem" },
           }}
         >
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque ullam
-          unde autem! Quibusdam odit, ab quis distinctio quae delectus magni
-          iste fugiat ea tempora. Eius eos assumenda quae rem natus!
+          Take care of your{" "}
+          <div style={{ display: "inline", color: "red" }}>body</div>. it's the
+          only place you have to
+          <div style={{ display: "inline", color: "red" }}> live.</div>
           <Button
             variant="contained"
             sx={{
