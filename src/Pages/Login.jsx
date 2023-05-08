@@ -63,11 +63,11 @@ export default function Login() {
           borderRadius: "10% 0%",
         }}
         onSubmit={async (e) => {
-          await value.setter[1]("SUBSCRIBED");
           e.preventDefault();
           await axios
             .post("https://gym-server-yi13.onrender.com/api/login", details)
             .then(() => {
+              value.setter[1]("SUBSCRIBED");
               nav("/home");
             })
             .catch((err) => {
